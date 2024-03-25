@@ -5,7 +5,7 @@ list_donnee <- function (lecteur)
                 # Récupérer la liste des fichiers
                 list_fichier <- list.files(path = lecteur,
                                            # Choix du type d'extension à rechercher
-                                           pattern = "\\.shp$|\\.dbf$|.gpkg|.tif",
+                                           pattern = "\\.shp$|\\.dbf$|.gpkg$|.tif$",
                                            # Ne pas tenir compte de la case (majuscule - minuscule)
                                            ignore.case = TRUE,
                                            full.names = TRUE,
