@@ -1,7 +1,8 @@
 #################### Recherche des doublons
 
 # Association des 2 listes de fichiers
-list_fichier <- bind_rows(liste1, liste2)
+list_fichier <- bind_rows(liste1, liste2) %>%
+                mutate(Extension = as.factor(toupper(sub("^.+\\.", "", Fichier))))
 
 # Recherche des fichiers avec le même nom
 doublon_n <- list_fichier[duplicated(list_fichier$Fichier) | duplicated(list_fichier$Fichier , fromLast = T),]
