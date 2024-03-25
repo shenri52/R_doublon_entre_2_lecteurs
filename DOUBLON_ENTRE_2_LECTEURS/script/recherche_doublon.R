@@ -1,32 +1,44 @@
 #################### Recherche des doublons
 
-# Association des 2 listes de fichiers
-list_fichier <- bind_rows(liste1, liste2) %>%
-                mutate(Extension = as.factor(toupper(sub("^.+\\.", "", Fichier))))
-
 # Recherche des fichiers avec le même nom
-doublon_n <- list_fichier[duplicated(list_fichier$Fichier) | duplicated(list_fichier$Fichier , fromLast = T),]
+doublon_n <- merge(liste2, liste1, by="Fichier", all=FALSE) %>%
+             rename.variable("Disque.x", "Source_Lecteur") %>%
+             rename.variable("Dossier.x", "Source_Dossier") %>%
+             rename.variable("Date_Modif.x", "Source_Date") %>%
+             rename.variable("Taille.x", "Source_Taille") %>%
+             rename.variable("Disque.y", "Dest_Lecteur") %>%
+             rename.variable("Dossier.y", "Dest_Dossier") %>%
+             rename.variable("Date_Modif.y", "Dest_Date") %>%
+             rename.variable("Taille.y", "Dest_Taille")
 
 # Classement par nom de fichier
 doublon_n <- doublon_n %>%
              arrange(Fichier)
 
 # Recherche des fichiers avec la même taille
-doublon_t <- list_fichier[duplicated(list_fichier$Taille_F) | duplicated(list_fichier$Taille_F , fromLast = T),]
+doublon_t <- merge(liste2, liste1, by="Taille", all=FALSE) %>%
+             rename.variable("Disque.x", "Source_Lecteur") %>%
+             rename.variable("Dossier.x", "Source_Dossier") %>%
+             rename.variable("Date_Modif.x", "Source_Date") %>%
+             rename.variable("Fichier.x", "Source_Fichier") %>%
+             rename.variable("Disque.y", "Dest_Lecteur") %>%
+             rename.variable("Dossier.y", "Dest_Dossier") %>%
+             rename.variable("Date_Modif.y", "Dest_Date") %>%
+             rename.variable("Taille.y", "Dest_Taille")
 
 # Classement par taille
 doublon_t <- doublon_t %>%
-             arrange(Taille_F)
+             arrange(Taille)
 
 # Export des données
 write.table(doublon_n,
-            file = ("doublon_nom.csv"),
+            file = ("result/doublon_nom.csv"),
             fileEncoding = "UTF-8",
             sep =";",
             row.names = FALSE)
 
 write.table(doublon_t,
-            file = ("doublon_taille.csv"),
+            file = ("result/doublon_taille.csv"),
             fileEncoding = "UTF-8",
             sep =";",
             row.names = FALSE)
